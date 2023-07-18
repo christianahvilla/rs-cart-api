@@ -1,0 +1,29 @@
+service: nest-service
+
+frameworkVersion: '3'
+
+useDotenv: true
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  environment:
+    PG_USER: ${env:RDS_USER}
+    PG_HOST: ${env:RDS_HOST}
+    PG_PASSWORD: ${env:RDS_PASS}
+    PG_DATABASE: ${env:RDS_DB}
+    PG_PORT: ${env:RDS_PORT}
+
+functions:
+  main:
+    handler: dist/main.handler
+    events:
+      - http:
+          method: ANY
+          path: /
+      - http:
+          method: ANY
+          path: '{proxy+}'
